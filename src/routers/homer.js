@@ -67,7 +67,8 @@ router.get('/cart', auth, async (req, res) => {
 router.delete('/remove', auth, async (req, res) => {
     try {
 
-        const removeCartItem = await Cart.findOneAndDelete({  owner: req.user._id })
+        const removeCartItem = await Cart.findOne({  owner: req.user._id })
+        
 
         res.send(removeCartItem)
 
