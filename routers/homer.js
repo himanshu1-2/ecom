@@ -16,7 +16,7 @@ router.post('/home', async (req, res) => {
     }
 })
 
-router.get('/a',  async (req, res) => {
+router.get('/a', auth ,async (req, res) => {
     const items = await Item.find()
     res.send(items)
 })

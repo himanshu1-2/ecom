@@ -13,12 +13,10 @@ app.use(userRouter)
 
 //undefiend
 
-//logout
 //mongo
 //heruko deployement
 //mongo production db
 //remove one api
-//aaj ka task 
 
 
 

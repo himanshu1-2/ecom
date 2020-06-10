@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
-const bcrypt=require('bcrypt')
-const jwt=require('jsonwebtoken')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
-const userSchema=new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -13,7 +13,7 @@ const userSchema=new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        unique:true,
+        unique: true,
         lowercase: true,
         validate(value) {
             if (!validator.isEmail(value)) {
@@ -42,27 +42,27 @@ const userSchema=new mongoose.Schema({
         }
     },
 
-tokens:[{
-token:{
-type:String,
- required: true,
+    tokens: [{
+        token: {
+            type: String,
+            required: true,
 
-}
+        }
 
 
-}],
+    }],
 
-avatar:
-{
-type:Buffer
+    avatar:
+    {
+        type: Buffer
 
-}
+    }
 
-},{
-timestamps:true
+}, {
+    timestamps: true
 
 })
-userSchema.virtual('cart',{
+userSchema.virtual('cart', {
     ref: 'Cart',
     localField: '_id',
     foreignField: 'owner'
@@ -73,58 +73,55 @@ userSchema.virtual('cart',{
 
 
 
-userSchema.methods.toJSON= function()
-{
-user=this
-const userObject=user.toObject()
-delete userObject.password
-delete userObject.tokens
-delete userObject.avatar
-return userObject
+userSchema.methods.toJSON = function () {
+    user = this
+    const userObject = user.toObject()
+    delete userObject.password
+    delete userObject.tokens
+    delete userObject.avatar
+    return userObject
 }
 
 //appicable to instance of model
-userSchema.methods.generateToken=async function()
-{
-const user=this
-//sign takes object which is unquie identifer
-const token=jwt.sign({_id:user._id.toString()},process.env.JWT_SECRET)
-//token array to keep tracks of token so that user can logged in from multiple devices
-user.tokens= user.tokens.concat({token})
-await user.save()
-return token
+userSchema.methods.generateToken = async function () {
+    const user = this
+    //sign takes object which is unquie identifer
+    const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET)
+    //token array to keep tracks of token so that user can logged in from multiple devices
+    user.tokens = user.tokens.concat({ token })
+    await user.save()
+    return token
 }
 
 //creates new dbmethod appicable to mode
-userSchema.statics.findByCredtional=async (email,password)=>{
+userSchema.statics.findByCredtional = async (email, password) => {
 
- const user =await User.findOne({email})
-    if(!user)
-     throw new Error(`unable to login by 1 email invaild expected${user.email} provided ${email}`)
-      
-    const isMatch=bcrypt.compare(password,user.password)
+    const user = await User.findOne({ email })
+    if (!user)
+        throw new Error(`unable to login by 1 email invaild expected${user.email} provided ${email}`)
 
-   if(!isMatch)
-    throw new Error('unable to login by 2')
-      
+    const isMatch = bcrypt.compare(password, user.password)
 
-  return user
+    if (!isMatch)
+        throw new Error('unable to login by 2')
+
+
+    return user
 
 }
 
-userSchema.pre('save',async function(next)
-{ 
-//gives acces to  individual user before saving
-const user =this
-   if(user.isModified('password'))
-      user.password= await bcrypt.hash(user.password,8)
+userSchema.pre('save', async function (next) {
+    //gives acces to  individual user before saving
+    const user = this
+    if (user.isModified('password'))
+        user.password = await bcrypt.hash(user.password, 8)
 
-next()
+    next()
 
 }
 
 
 )
-const User = mongoose.model('User',userSchema )
+const User = mongoose.model('User', userSchema)
 
 module.exports = User
