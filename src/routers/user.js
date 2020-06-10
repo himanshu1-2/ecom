@@ -2,7 +2,7 @@ const express = require('express')
 const User = require('../model/user')
 const auth= require('../middleware/auth')
 const router = new express.Router()
-const multer = require('multer')
+
 //const {welcomeEmail}=require('../emails/accont')
 
 router.post('/users', async (req, res) => {
@@ -50,45 +50,6 @@ router.post('/users/logout', auth, async (req, res) => {
 })
 
 
-const upload = multer({
-   
-
-fileFilter(req, file, cb) {
-        if (!file.originalname.match(/\.(png|jpg|jpeg)$/)) {
-            return cb(new Error('Please upload a Word document'))
-        }
-
-        cb(undefined, true)
-    }
-
-})
-router.post('/user/me/upload', auth,upload.single('avatar'),async (req, res) => {
-    
-   req.user.avatar = req.file.buffer
-    await req.user.save()
-
-  res.send()
-
-},(error,req,res,next)=>{
-   res.status(400).send({error:error.message})
-
-})
-
-
-router.get('/users/:id/avatar', async (req, res) => {
-    try {
-        const user = await User.findById(req.params.id)
-
-        if (!user || !user.avatar) {
-            throw new Error()
-        }
-
-        res.set('Content-Type', 'image/jpg')
-        res.send(user.avatar)
-    } catch (e) {
-        res.status(404).send()
-    }
-})
 
 
 router.get('/users/me',  auth ,async (req, res) => {
