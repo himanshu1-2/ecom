@@ -64,12 +64,15 @@ router.get('/cart', auth, async (req, res) => {
 
 })
 
-router.delete('/remove', auth, async (req, res) => {
+router.delete('/remove/:id', auth, async (req, res) => {
     try {
+        const cart = await Cart.findOneAndDelete({ _id: req.params.id, owner: req.user._id })
 
-        
+        if (!cart) {
+            res.status(404).send()
+        }
 
-
+        res.send(cart)
     } catch (e) {
         res.status(500).send()
     }
