@@ -8,7 +8,7 @@ const userSchema= new mongoose.Schema({
               template:String
              
             },
-            data: {
+            subdata: {
               Description: String,
               Image:String,
               price:Number

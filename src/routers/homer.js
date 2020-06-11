@@ -27,9 +27,9 @@ router.post('/button', auth, async (req, res) => {
         let index = parseInt(req.query.index)
         const item = items[0]
         const cartItems = new Cart({ ...item.data.widgets, owner: req.user._id })
-        let price = item.data.widgets[index].data.price
+        let price = item.data.widgets[index].subdata.price
 
-        //cartItems.totalPrice().then((data)=>{console.log(data)})
+        
         cartItems.insertCart(item.data.widgets[index])
 
         res.send("item ")
@@ -67,10 +67,7 @@ router.get('/cart', auth, async (req, res) => {
 router.delete('/remove', auth, async (req, res) => {
     try {
 
-        const removeCartItem = await Cart.findOne({  owner: req.user._id })
         
-
-        res.send(removeCartItem)
 
 
     } catch (e) {
