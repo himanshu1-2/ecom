@@ -1,9 +1,10 @@
 const Item = require('../model/item')
 const Cart = require('../model/cart')
 const express = require('express')
+
 const auth = require('../middleware/auth')
 const router = new express.Router()
-router.post('/home', async (req, res) => {
+router.post('/admin', async (req, res) => {
     try {
 
         const items = new Item(req.body)
@@ -16,10 +17,26 @@ router.post('/home', async (req, res) => {
     }
 })
 
-router.get('/a', auth ,async (req, res) => {
+router.get('/home', auth, async (req, res) => {
     const items = await Item.find()
     res.send(items)
 })
+
+
+
+router.get('/search', async (req, res) => {
+
+    const items = await Item.find()
+    items[0].data.widgets.forEach(element => {
+        if (element.subdata.Description === req.query.Description)
+            res.send(element)
+    });
+
+
+
+})
+
+
 
 router.post('/button', auth, async (req, res) => {
     try {
@@ -29,10 +46,10 @@ router.post('/button', auth, async (req, res) => {
         const cartItems = new Cart({ ...item.data.widgets, owner: req.user._id })
         let price = item.data.widgets[index].subdata.price
 
-        
+
         cartItems.insertCart(item.data.widgets[index])
 
-        res.send("item ")
+        res.send("item inserted")
 
 
 
@@ -81,14 +98,18 @@ router.delete('/remove/:id', auth, async (req, res) => {
 router.delete('/removeall', auth, async (req, res) => {
     try {
 
-        const removeCartItem = await Cart.deleteMany({owner: req.user._id })
+        const removeCartItem = await Cart.deleteMany({ owner: req.user._id })
 
-        res.send("all")
+        res.send("cart is empty")
 
     } catch (e) {
         res.status(500).send()
     }
 })
+
+
+
+
 
 
 module.exports = router

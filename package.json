@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-   "start": "node src/index.js",
-  "dev": "env-cmd -f ./config/dev.env nodemon src/index.js",
-    "test": "jest --watch"
+    "start": "node src/index.js",
+    "dev": "env-cmd -f ./config/dev.env nodemon src/index.js",
+    "test": "env-cmd -f ./config/test.env jest --watch"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +19,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.1.10",
     "mongoose": "^5.3.16",
+    "path": "^0.12.7",
+    "paypal-rest-sdk": "^1.8.1",
     "supertest": "^4.0.2",
     "validator": "^10.9.0"
   },

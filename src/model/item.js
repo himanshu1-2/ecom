@@ -37,7 +37,7 @@ const data= {
              
             },
             subdata: {
-             Description : "rvItem1",
+             Description : "premia",
              Image:"url",
              price:100
              
@@ -51,7 +51,7 @@ const data1= {
              
             },
             subdata: {
-             Description : "rvItem2",
+             Description : "colgate",
              Image:"url",
              price:300
              
