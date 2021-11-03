@@ -22,7 +22,7 @@
     "path": "^0.12.7",
     "paypal-rest-sdk": "^1.8.1",
     "supertest": "^4.0.2",
-    "validator": "^10.9.0"
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "env-cmd": "^10.1.0",
